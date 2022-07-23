@@ -1,6 +1,6 @@
 # Project: Place-react (landing page)
 
-See demo [https://vasiliy-muravev.github.io/mesto-react/](https://vasiliy-muravev.github.io/mesto-react/)
+See demo [https://vasiliy-muravev.github.io/mesto-react-auth/](https://vasiliy-muravev.github.io/mesto-react-auth/)
 
 ## What is this?
 
@@ -11,7 +11,7 @@ One page website on pure modern Html and CSS. Educational project from [https://
 1. Download project files
 
 - The easiest way to run a project is download zip
-  from [https://github.com/vasiliy-muravev/mesto-react](https://github.com/vasiliy-muravev/mesto-react)
+  from [https://github.com/vasiliy-muravev/mesto-react-auth](https://github.com/vasiliy-muravev/mesto-react-auth)
 - Or you can use the command
 
 ```sh
