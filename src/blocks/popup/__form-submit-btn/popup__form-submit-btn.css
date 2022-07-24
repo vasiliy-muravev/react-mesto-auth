@@ -4,6 +4,7 @@
     height: 50px;
     color: #fff;
     margin-top: 31px;
+    cursor: pointer;
 }
 
 .popup__form-submit-btn:hover {

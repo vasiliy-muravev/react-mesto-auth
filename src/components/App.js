@@ -12,7 +12,8 @@ import {CurrentUserContext} from '../contexts/CurrentUserContext.js';
 import AddPlacePopup from "./AddPlacePopup";
 import ProtectedRoute from "./ProtectedRoute";
 import Login from "./Login";
-import {Route} from "react-router-dom";
+import {Route, Switch, Redirect, useHistory} from "react-router-dom";
+import Register from "./Register";
 
 function App() {
     /* Начальное состояние попапов - закрыты */
@@ -133,48 +134,45 @@ function App() {
         <CurrentUserContext.Provider value={currentUser}>
             <div className="page">
                 <Header/>
-
-
-                <ProtectedRoute
-                    exact path="/"
-                    loggedIn={loggedIn}
-                    component={Main}
-                    onEditProfile={handleEditProfileClick}
-                    onAddPlace={handleAddPlaceClick}
-                    onEditAvatar={handleEditAvatarClick}
-                    onCardClick={handleCardClick}
-                    onDeleteClick={handlePlaceDeleteClick}
-                    onClose={closeAllPopups}
-                    card={selectedCard}
-                    isOpen={isPlaceDeletePopupOpen}
-                    cards={cards}
-                    onCardLike={handleCardLike}
-                    onCardDeleteSubmit={handlePlaceDeleteSubmit}
-                    isLoading={isLoading}/>
-
-                <Route path="/sign-in">
-                    <Login/>
-                </Route>
-
+                <Switch>
+                    <ProtectedRoute
+                        exact path="/"
+                        loggedIn={loggedIn}
+                        component={Main}
+                        onEditProfile={handleEditProfileClick}
+                        onAddPlace={handleAddPlaceClick}
+                        onEditAvatar={handleEditAvatarClick}
+                        onCardClick={handleCardClick}
+                        onDeleteClick={handlePlaceDeleteClick}
+                        onClose={closeAllPopups}
+                        card={selectedCard}
+                        isOpen={isPlaceDeletePopupOpen}
+                        cards={cards}
+                        onCardLike={handleCardLike}
+                        onCardDeleteSubmit={handlePlaceDeleteSubmit}
+                        isLoading={isLoading}/>
+                    <Route path="/sign-in">
+                        <Login/>
+                    </Route>
+                    <Route path="/sign-up">
+                        <Register/>
+                    </Route>
+                </Switch>
                 <EditProfilePopup isOpen={isEditProfilePopupOpen}
                                   onClose={closeAllPopups}
                                   onUpdateUser={handleUpdateUser}
                                   isLoading={isLoading}/>
-
                 <AddPlacePopup isOpen={isAddPlacePopupOpen}
                                onClose={closeAllPopups}
                                onAddPlace={handleAddPlaceSubmit}
                                isLoading={isLoading}/>
-
                 <EditAvatarPopup isOpen={isEditAvatarPopupOpen}
                                  onClose={closeAllPopups}
                                  onUpdateAvatar={handleUpdateAvatar}
                                  isLoading={isLoading}/>
-
                 <ImagePopup onClose={closeAllPopups}
                             card={selectedCard}
                             isOpen={isImagePopupOpen}/>
-
                 <Footer/>
             </div>
         </CurrentUserContext.Provider>
