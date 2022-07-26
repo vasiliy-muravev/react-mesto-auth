@@ -1,7 +1,6 @@
 import {Link} from 'react-router-dom';
 import {useLocation} from "react-router-dom";
 import React from 'react';
-import {CurrentUserContext} from "../contexts/CurrentUserContext";
 
 function Header({loggedIn, onSignOut, email}) {
     const pathname = useLocation().pathname;

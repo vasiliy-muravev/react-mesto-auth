@@ -2,9 +2,9 @@ import React from 'react';
 import successImage from '../images/success.png'
 import failImage from '../images/fail.png'
 
-const InfoTooltip = ({isOpen, onClose, success}) => {
-    const image = success ? successImage : failImage;
-    const message = success ? 'Вы успешно зарегистрировались!' : 'Что-то пошло не так! Попробуйте ещё раз.';
+const InfoTooltip = ({isOpen, onClose, isSuccess}) => {
+    const image = isSuccess ? successImage : failImage;
+    const message = isSuccess ? 'Вы успешно зарегистрировались!' : 'Что-то пошло не так! Попробуйте ещё раз.';
 
     return (
         <div className={`popup popup__info-tooltip ${isOpen ? 'popup_opened' : ''}`}>

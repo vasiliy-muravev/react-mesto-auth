@@ -25,13 +25,13 @@ function App() {
     const [isPlaceDeletePopupOpen, setPlaceDeletePopupOpen] = useState(false);
     const [cards, setCardState] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-    const [isInfoTooltipPopupOpen, setInfoTooltipPopupState] = useState(false);
+    const [isInfoTooltipPopupOpen, setInfoTooltipPopupOpenState] = useState(false);
 
     /* Контекст текущего пользователя */
     const [currentUser, setCurrentUser] = useState({});
     const [loggedIn, setLoggedIn] = useState(false);
     const [email, setEmail] = useState('');
-
+    const [isInfoTooltipSuccess, setInfoTooltipSuccessState] = useState(false);
     const history = useHistory();
 
     /* Проверяем авторизацию */
@@ -72,7 +72,7 @@ function App() {
         setAddPlacePopupState(false);
         setEditAvatarPopupState(false);
         setImagePopupState(false);
-        setInfoTooltipPopupState(false);
+        setInfoTooltipPopupOpenState(false);
         setSelectedCardState({});
         setPlaceDeletePopupOpen(false);
     };
@@ -157,8 +157,12 @@ function App() {
     const onRegister = ({email, password}) => {
         return api.register(email, password)
             .then((res) => {
-                if (!res || res.statusCode === 400) throw new Error('Что-то пошло не так');
-                return res;
+                setInfoTooltipSuccessState(false);
+                setInfoTooltipPopupOpenState(true);
+                if (typeof res.data._id !== undefined) {
+                    setInfoTooltipSuccessState(true);
+                    setInfoTooltipPopupOpenState(true);
+                }
             });
     }
 
@@ -233,7 +237,8 @@ function App() {
                             onClose={closeAllPopups}
                             card={selectedCard}/>
                 <InfoTooltip isOpen={isInfoTooltipPopupOpen}
-                             onClose={closeAllPopups}/>
+                             onClose={closeAllPopups}
+                             isSuccess={isInfoTooltipSuccess}/>
                 <Footer/>
             </div>
         </CurrentUserContext.Provider>

@@ -4,9 +4,7 @@ import {Link, useHistory} from 'react-router-dom';
 const Register = ({onRegister}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-
     const history = useHistory();
-
     const resetForm = () => {
         setEmail('');
         setPassword('');
