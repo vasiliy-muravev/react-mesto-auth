@@ -5,3 +5,11 @@
     font-size: 18px;
     line-height: 1.22;
 }
+
+.header__link:hover {
+    opacity: .6;
+}
+
+.header__link:last-child {
+    margin-left: 24px;
+}

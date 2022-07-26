@@ -14,7 +14,6 @@ const Login = ({onLogin}) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(email, password);
         onLogin({email, password})
             .then(
                 () => {

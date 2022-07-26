@@ -16,6 +16,7 @@ const Register = ({onRegister}) => {
         e.preventDefault();
         onRegister({ email, password })
             .then(() => history.push('/sign-in'))
+            .then(() => resetForm())
             .catch((err) => {
                 console.log(err);
             });

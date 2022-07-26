@@ -30,6 +30,7 @@ function App() {
     /* Контекст текущего пользователя */
     const [currentUser, setCurrentUser] = useState({});
     const [loggedIn, setLoggedIn] = useState(false);
+    const [email, setEmail] = useState('');
 
     const history = useHistory();
 
@@ -39,6 +40,7 @@ function App() {
         if (jwt) {
             api.checkAuthorize(jwt).then((res) => {
                 if (res) {
+                    setEmail(res.data.email);
                     setLoggedIn(true);
                 }
             });
@@ -48,7 +50,7 @@ function App() {
         if (loggedIn) {
             history.push('/');
         }
-    }, [loggedIn])
+    }, [loggedIn, setEmail])
 
     /* Эффект получения данных о пользователе при монтировании */
     React.useEffect(() => {
@@ -166,15 +168,28 @@ function App() {
             .then((res) => {
                 if (res.token) {
                     localStorage.setItem('jwt', res.token);
+                    setEmail(email);
                     setLoggedIn(true);
                 }
             });
     }
 
+    /* Обработчик удаления авторизации */
+    const onSignOut = () => {
+        const jwt = localStorage.getItem('jwt');
+        if (jwt) {
+            localStorage.removeItem('jwt');
+            setLoggedIn(false);
+            setEmail('');
+        }
+    }
+
     return (
         <CurrentUserContext.Provider value={currentUser}>
             <div className="page">
-                <Header/>
+                <Header loggedIn={loggedIn}
+                        onSignOut={onSignOut}
+                        email={email}/>
                 <Switch>
                     <ProtectedRoute
                         exact path="/"
