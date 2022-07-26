@@ -14,6 +14,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import Login from "./Login";
 import {Route, Switch, Redirect, useHistory} from "react-router-dom";
 import Register from "./Register";
+import InfoTooltip from "./InfoTooltip";
 
 function App() {
     /* Начальное состояние попапов - закрыты */
@@ -25,6 +26,7 @@ function App() {
     const [isPlaceDeletePopupOpen, setPlaceDeletePopupOpen] = useState(false);
     const [cards, setCardState] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [isInfoTooltipPopupOpen, setInfoTooltipPopupState] = useState(true);
 
     /* Контекст текущего пользователя */
     const [currentUser, setCurrentUser] = useState({});
@@ -50,6 +52,7 @@ function App() {
         setAddPlacePopupState(false);
         setEditAvatarPopupState(false);
         setImagePopupState(false);
+        setInfoTooltipPopupState(false);
         setSelectedCardState({});
         setPlaceDeletePopupOpen(false);
     };
@@ -170,9 +173,11 @@ function App() {
                                  onClose={closeAllPopups}
                                  onUpdateAvatar={handleUpdateAvatar}
                                  isLoading={isLoading}/>
-                <ImagePopup onClose={closeAllPopups}
-                            card={selectedCard}
-                            isOpen={isImagePopupOpen}/>
+                <ImagePopup isOpen={isImagePopupOpen}
+                            onClose={closeAllPopups}
+                            card={selectedCard}/>
+                <InfoTooltip isOpen={isInfoTooltipPopupOpen}
+                             onClose={closeAllPopups}/>
                 <Footer/>
             </div>
         </CurrentUserContext.Provider>
