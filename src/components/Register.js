@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Link, useHistory} from 'react-router-dom';
 
-const Register = ({onLogin}) => {
+const Register = ({onRegister}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -14,13 +14,17 @@ const Register = ({onLogin}) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
+        onRegister({ email, password })
+            .then(() => history.push('/sign-in'))
+            .catch((err) => {
+                console.log(err);
+            });
     }
 
     return (
         <div className="auth">
             <h3 className="auth__title">Регистрация</h3>
-            <form className="auth__form">
+            <form className="auth__form" onSubmit={handleSubmit}>
                 <input id="email" required name="email" type="text" value={email} placeholder="Email"
                        className="auth__form-input" onChange={({target}) => setEmail(target.value)}/>
                 <input id="password" required name="password" type="password" value={password} placeholder="Пароль"

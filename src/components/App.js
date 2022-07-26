@@ -5,14 +5,13 @@ import Footer from "./Footer.js";
 import ImagePopup from "./ImagePopup.js";
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
-import React from "react";
-import {useState} from "react";
+import React, {useState} from "react";
 import {api} from "../utils/Api";
 import {CurrentUserContext} from '../contexts/CurrentUserContext.js';
 import AddPlacePopup from "./AddPlacePopup";
 import ProtectedRoute from "./ProtectedRoute";
 import Login from "./Login";
-import {Route, Switch, Redirect, useHistory} from "react-router-dom";
+import {Redirect, Route, Switch, useHistory} from "react-router-dom";
 import Register from "./Register";
 import InfoTooltip from "./InfoTooltip";
 
@@ -26,11 +25,30 @@ function App() {
     const [isPlaceDeletePopupOpen, setPlaceDeletePopupOpen] = useState(false);
     const [cards, setCardState] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-    const [isInfoTooltipPopupOpen, setInfoTooltipPopupState] = useState(true);
+    const [isInfoTooltipPopupOpen, setInfoTooltipPopupState] = useState(false);
 
     /* Контекст текущего пользователя */
     const [currentUser, setCurrentUser] = useState({});
     const [loggedIn, setLoggedIn] = useState(false);
+
+    const history = useHistory();
+
+    /* Проверяем авторизацию */
+    React.useEffect(() => {
+        const jwt = localStorage.getItem('jwt');
+        if (jwt) {
+            api.checkAuthorize(jwt).then((res) => {
+                if (res) {
+                    setLoggedIn(true);
+                }
+            });
+        }
+    }, []);
+    React.useEffect(() => {
+        if (loggedIn) {
+            history.push('/');
+        }
+    }, [loggedIn])
 
     /* Эффект получения данных о пользователе при монтировании */
     React.useEffect(() => {
@@ -133,6 +151,26 @@ function App() {
         });
     }
 
+    /* Обработчик регистрации */
+    const onRegister = ({email, password}) => {
+        return api.register(email, password)
+            .then((res) => {
+                if (!res || res.statusCode === 400) throw new Error('Что-то пошло не так');
+                return res;
+            });
+    }
+
+    /* Обработчик авторизации */
+    const onLogin = ({email, password}) => {
+        return api.authorize(email, password)
+            .then((res) => {
+                if (res.token) {
+                    localStorage.setItem('jwt', res.token);
+                    setLoggedIn(true);
+                }
+            });
+    }
+
     return (
         <CurrentUserContext.Provider value={currentUser}>
             <div className="page">
@@ -155,10 +193,13 @@ function App() {
                         onCardDeleteSubmit={handlePlaceDeleteSubmit}
                         isLoading={isLoading}/>
                     <Route path="/sign-in">
-                        <Login/>
+                        <Login onLogin={onLogin}/>
                     </Route>
                     <Route path="/sign-up">
-                        <Register/>
+                        <Register onRegister={onRegister}/>
+                    </Route>
+                    <Route path="/*">
+                        <Redirect to="/sign-in"/>
                     </Route>
                 </Switch>
                 <EditProfilePopup isOpen={isEditProfilePopupOpen}

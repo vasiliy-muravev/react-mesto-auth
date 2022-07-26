@@ -14,13 +14,22 @@ const Login = ({onLogin}) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
+        console.log(email, password);
+        onLogin({email, password})
+            .then(
+                () => {
+                    history.push('/');
+                })
+            .then(() => resetForm())
+            .catch((err) => {
+                console.log(err);
+            });
     }
 
     return (
         <div className="auth">
             <h3 className="auth__title">Вход</h3>
-            <form className="auth__form">
+            <form className="auth__form" onSubmit={handleSubmit}>
                 <input id="email" required name="email" type="text" value={email} placeholder="Email"
                        className="auth__form-input" onChange={({target}) => setEmail(target.value)}/>
                 <input id="password" required name="password" type="password" value={password} placeholder="Пароль"

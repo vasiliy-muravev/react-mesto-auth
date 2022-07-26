@@ -5,6 +5,7 @@ class Api {
             'Content-Type': 'application/json'
         };
         this._baseUrl = baseUrl;
+        this._authBaseUrl = 'https://auth.nomoreparties.co'
     }
 
     getAppInfo() {
@@ -74,6 +75,35 @@ class Api {
                 avatar: link,
             })
         }).then(res => this._getResponseData(res));
+    }
+
+    register(email, password) {
+        this.url = this._authBaseUrl + '/signup';
+        return fetch(this.url, {
+            method: 'POST',
+            headers: this.headers,
+            body: JSON.stringify({email, password})
+        }).then(res => res.json());
+    }
+
+    authorize(email, password) {
+        this.url = this._authBaseUrl + '/signin';
+        return fetch(this.url, {
+            method: 'POST',
+            headers: this.headers,
+            body: JSON.stringify({email, password})
+        }).then(res => res.json());
+    }
+
+    checkAuthorize(token) {
+        this.url = this._authBaseUrl + '/users/me';
+        return fetch(this.url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+        }).then(res => res.json());
     }
 
     _getResponseData(res) {
