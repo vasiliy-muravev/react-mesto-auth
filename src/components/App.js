@@ -43,6 +43,8 @@ function App() {
                     setEmail(res.data.email);
                     setLoggedIn(true);
                 }
+            }).catch((err) => {
+                console.log(err);
             });
         }
     }, []);
@@ -50,7 +52,7 @@ function App() {
         if (loggedIn) {
             history.push('/');
         }
-    }, [loggedIn, setEmail])
+    }, [loggedIn, setEmail, history])
 
     /* Эффект получения данных о пользователе при монтировании */
     React.useEffect(() => {
@@ -92,12 +94,17 @@ function App() {
     /* Изменение данных пользователя */
     const handleUpdateUser = (formData) => {
         setIsLoading(true);
-        api.setUserData(formData).then((userData) => {
-            setCurrentUser(userData);
-            closeAllPopups();
-        }).finally(() => {
-            setIsLoading(false);
-        });
+        api.setUserData(formData)
+            .then((userData) => {
+                setCurrentUser(userData);
+                closeAllPopups();
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
     };
 
     /* Изменение аватара */
@@ -107,9 +114,13 @@ function App() {
             .then((userData) => {
                 setCurrentUser(userData);
                 closeAllPopups();
-            }).finally(() => {
-            setIsLoading(false);
-        });
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
     };
 
     /* Передаем массив с карточками в card */
@@ -128,41 +139,56 @@ function App() {
         /* Отправляем запрос в API и получаем обновлённые данные карточки */
         api.changeLikeCardStatus(card._id, !isLiked).then((newCard) => {
             setCardState((state) => state.map((c) => c._id === card._id ? newCard : c));
+        }).catch((err) => {
+            console.log(err);
         });
     }
 
     /* Обработчик подтверждения удаления карточки */
     const handlePlaceDeleteSubmit = (card) => {
         setIsLoading(true);
-        api.deleteCard(card._id).then(() => {
-            setCardState(currentCards => currentCards.filter((c) => c._id !== card._id));
-            closeAllPopups();
-        }).finally(() => {
-            setIsLoading(false);
-        });
+        api.deleteCard(card._id)
+            .then(() => {
+                setCardState(currentCards => currentCards.filter((c) => c._id !== card._id));
+                closeAllPopups();
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
     };
 
     /* Обработчик добавления карточки */
     const handleAddPlaceSubmit = (formData) => {
         setIsLoading(true);
-        api.addCard(formData).then((newCard) => {
-            setCardState([newCard, ...cards]);
-            closeAllPopups();
-        }).finally(() => {
-            setIsLoading(false);
-        });
+        api.addCard(formData)
+            .then((newCard) => {
+                setCardState([newCard, ...cards]);
+                closeAllPopups();
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
     }
 
     /* Обработчик регистрации */
     const onRegister = ({email, password}) => {
         return api.register(email, password)
             .then((res) => {
-                setInfoTooltipSuccessState(false);
-                setInfoTooltipPopupOpenState(true);
-                if (typeof res.data._id !== undefined) {
+                if (res.data) {
                     setInfoTooltipSuccessState(true);
                     setInfoTooltipPopupOpenState(true);
+                } else {
+                    setInfoTooltipSuccessState(false);
+                    setInfoTooltipPopupOpenState(true);
                 }
+            }).catch((err) => {
+                console.log(err);
             });
     }
 
@@ -174,7 +200,12 @@ function App() {
                     localStorage.setItem('jwt', res.token);
                     setEmail(email);
                     setLoggedIn(true);
+                } else {
+                    setInfoTooltipSuccessState(false);
+                    setInfoTooltipPopupOpenState(true);
                 }
+            }).catch((err) => {
+                console.log(err);
             });
     }
 
