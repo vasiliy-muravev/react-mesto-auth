@@ -1,26 +1,12 @@
 import React, {useState} from 'react';
-import {useHistory} from 'react-router-dom';
 
 const Login = ({onLogin}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const history = useHistory();
-    const resetForm = () => {
-        setEmail('');
-        setPassword('');
-    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        onLogin({email, password})
-            .then(
-                () => {
-                    history.push('/');
-                })
-            .then(() => resetForm())
-            .catch((err) => {
-                console.log(err);
-            });
+        onLogin({email, password});
     }
 
     return (

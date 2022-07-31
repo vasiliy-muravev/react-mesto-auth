@@ -183,6 +183,7 @@ function App() {
                 if (res.data) {
                     setInfoTooltipSuccessState(true);
                     setInfoTooltipPopupOpenState(true);
+                    history.push('/sign-in');
                 } else {
                     setInfoTooltipSuccessState(false);
                     setInfoTooltipPopupOpenState(true);
@@ -200,6 +201,7 @@ function App() {
                     localStorage.setItem('jwt', res.token);
                     setEmail(email);
                     setLoggedIn(true);
+                    history.push('/');
                 } else {
                     setInfoTooltipSuccessState(false);
                     setInfoTooltipPopupOpenState(true);
