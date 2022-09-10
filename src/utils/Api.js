@@ -5,7 +5,9 @@ class Api {
             'Content-Type': 'application/json'
         };
         this._baseUrl = baseUrl;
-        this._authBaseUrl = 'https://auth.nomoreparties.co'
+        // this._authBaseUrl = 'https://auth.nomoreparties.co'
+        // this._authBaseUrl = 'http://127.0.0.1:3000'
+        this._authBaseUrl = 'https://api.vasiliymuravev.nomoredomains.sbs'
     }
 
     getAppInfo() {
@@ -91,6 +93,7 @@ class Api {
         return fetch(this.url, {
             method: 'POST',
             headers: this.headers,
+            credentials: 'include',
             body: JSON.stringify({email, password})
         }).then(res => res.json());
     }
