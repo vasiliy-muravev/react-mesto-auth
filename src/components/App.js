@@ -14,6 +14,7 @@ import Login from "./Login";
 import {Redirect, Route, Switch, useHistory} from "react-router-dom";
 import Register from "./Register";
 import InfoTooltip from "./InfoTooltip";
+import {getCookie, setCookie, deleteCookie} from "../utils/cookie";
 
 function App() {
     /* Начальное состояние попапов - закрыты */
@@ -36,7 +37,8 @@ function App() {
 
     /* Проверяем авторизацию */
     React.useEffect(() => {
-        const jwt = localStorage.getItem('jwt');
+        // const jwt = localStorage.getItem('jwt');
+        const jwt = getCookie('jwt');
         if (jwt) {
             api.checkAuthorize(jwt).then((res) => {
                 if (res) {
@@ -198,7 +200,9 @@ function App() {
         return api.authorize(email, password)
             .then((res) => {
                 if (res.token) {
-                    localStorage.setItem('jwt', res.token);
+                    // localStorage.setItem('jwt', res.token);
+                    deleteCookie('jwt');
+                    setCookie('jwt', res.token);
                     setEmail(email);
                     setLoggedIn(true);
                     history.push('/');

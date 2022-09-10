@@ -1,9 +1,15 @@
+import {getCookie} from "./cookie";
+
 class Api {
-    constructor(baseUrl) {
+    constructor(baseUrl, token) {
+        // this.headers = {
+        //     authorization: '0ed12c18-e80a-434a-9e00-41eb70564c88',
+        //     'Content-Type': 'application/json'
+        // };
         this.headers = {
-            authorization: '0ed12c18-e80a-434a-9e00-41eb70564c88',
-            'Content-Type': 'application/json'
-        };
+            'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+        }
         this._baseUrl = baseUrl;
         // this._authBaseUrl = 'https://auth.nomoreparties.co'
         // this._authBaseUrl = 'http://127.0.0.1:3000'
@@ -17,14 +23,16 @@ class Api {
     getInitialCards() {
         this.url = this._baseUrl + 'cards';
         return fetch(this.url, {
-            headers: this.headers
+            headers: this.headers,
+            credentials: 'include',
         }).then(res => this._getResponseData(res))
     }
 
     getUserData() {
         this.url = this._baseUrl + 'users/me';
         return fetch(this.url, {
-            headers: this.headers
+            headers: this.headers,
+            credentials: 'include',
         }).then(res => this._getResponseData(res))
     }
 
@@ -33,6 +41,7 @@ class Api {
         return fetch(this.url, {
             method: 'PATCH',
             headers: this.headers,
+            credentials: 'include',
             body: JSON.stringify({
                 name: data.name,
                 about: data.about
@@ -45,6 +54,7 @@ class Api {
         return fetch(this.url, {
             method: 'POST',
             headers: this.headers,
+            credentials: 'include',
             body: JSON.stringify({
                 name: data.name,
                 link: data.link
@@ -57,6 +67,7 @@ class Api {
         return fetch(this.url, {
             method: 'DELETE',
             headers: this.headers,
+            credentials: 'include',
         }).then(res => this._getResponseData(res));
     }
 
@@ -65,6 +76,7 @@ class Api {
         return fetch(this.url, {
             method: isLiked ? 'PUT' : 'DELETE',
             headers: this.headers,
+            credentials: 'include',
         }).then(res => this._getResponseData(res));
     }
 
@@ -73,6 +85,7 @@ class Api {
         return fetch(this.url, {
             method: 'PATCH',
             headers: this.headers,
+            credentials: 'include',
             body: JSON.stringify({
                 avatar: link,
             })
@@ -102,10 +115,12 @@ class Api {
         this.url = this._authBaseUrl + '/users/me';
         return fetch(this.url, {
             method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
-            },
+            credentials: 'include',
+            // headers: {
+            //     'Content-Type': 'application/json',
+            //     'Authorization': `Bearer ${token}`,
+            // },
+            headers: this.headers,
         }).then(res => res.json());
     }
 
@@ -117,4 +132,11 @@ class Api {
     }
 }
 
-export const api = new Api('https://mesto.nomoreparties.co/v1/cohort-42/');
+console.log(localStorage.getItem('jwt'));
+console.log(document.cookie);
+// export const api = new Api('https://mesto.nomoreparties.co/v1/cohort-42/');
+export const api = new Api(
+    'https://api.vasiliymuravev.nomoredomains.sbs/',
+    // localStorage.getItem('jwt')
+    getCookie('jwt')
+    );
