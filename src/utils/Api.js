@@ -2,17 +2,11 @@ import {getCookie} from "./cookie";
 
 class Api {
     constructor(baseUrl, token) {
-        // this.headers = {
-        //     authorization: '0ed12c18-e80a-434a-9e00-41eb70564c88',
-        //     'Content-Type': 'application/json'
-        // };
         this.headers = {
             'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`,
         }
         this._baseUrl = baseUrl;
-        // this._authBaseUrl = 'https://auth.nomoreparties.co'
-        // this._authBaseUrl = 'http://127.0.0.1:3000'
         this._authBaseUrl = 'https://api.vasiliymuravev.nomoredomains.sbs'
     }
 
@@ -111,15 +105,11 @@ class Api {
         }).then(res => res.json());
     }
 
-    checkAuthorize(token) {
+    checkAuthorize() {
         this.url = this._authBaseUrl + '/users/me';
         return fetch(this.url, {
             method: 'GET',
             credentials: 'include',
-            // headers: {
-            //     'Content-Type': 'application/json',
-            //     'Authorization': `Bearer ${token}`,
-            // },
             headers: this.headers,
         }).then(res => res.json());
     }
@@ -132,11 +122,7 @@ class Api {
     }
 }
 
-console.log(localStorage.getItem('jwt'));
-console.log(document.cookie);
-// export const api = new Api('https://mesto.nomoreparties.co/v1/cohort-42/');
 export const api = new Api(
     'https://api.vasiliymuravev.nomoredomains.sbs/',
-    // localStorage.getItem('jwt')
     getCookie('jwt')
     );

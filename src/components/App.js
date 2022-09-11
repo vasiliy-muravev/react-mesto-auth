@@ -37,12 +37,11 @@ function App() {
 
     /* Проверяем авторизацию */
     React.useEffect(() => {
-        // const jwt = localStorage.getItem('jwt');
         const jwt = getCookie('jwt');
         if (jwt) {
             api.checkAuthorize(jwt).then((res) => {
                 if (res) {
-                    setEmail(res.data.email);
+                    setEmail(res.email);
                     setLoggedIn(true);
                 }
             }).catch((err) => {
@@ -200,7 +199,6 @@ function App() {
         return api.authorize(email, password)
             .then((res) => {
                 if (res.token) {
-                    // localStorage.setItem('jwt', res.token);
                     deleteCookie('jwt');
                     setCookie('jwt', res.token);
                     setEmail(email);
@@ -217,9 +215,9 @@ function App() {
 
     /* Обработчик удаления авторизации */
     const onSignOut = () => {
-        const jwt = localStorage.getItem('jwt');
+        const jwt = getCookie('jwt');
         if (jwt) {
-            localStorage.removeItem('jwt');
+            deleteCookie('jwt');
             setLoggedIn(false);
             setEmail('');
         }
