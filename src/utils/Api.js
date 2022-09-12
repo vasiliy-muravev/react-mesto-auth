@@ -4,10 +4,9 @@ class Api {
     constructor(baseUrl, token) {
         this.headers = {
             'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
+            'Authorization': token,
         }
         this._baseUrl = baseUrl;
-        this._authBaseUrl = 'https://api.vasiliymuravev.nomoredomains.sbs'
     }
 
     getAppInfo() {
@@ -87,7 +86,7 @@ class Api {
     }
 
     register(email, password) {
-        this.url = this._authBaseUrl + '/signup';
+        this.url = this._baseUrl + 'signup';
         return fetch(this.url, {
             method: 'POST',
             headers: this.headers,
@@ -96,7 +95,7 @@ class Api {
     }
 
     authorize(email, password) {
-        this.url = this._authBaseUrl + '/signin';
+        this.url = this._baseUrl + 'signin';
         return fetch(this.url, {
             method: 'POST',
             headers: this.headers,
@@ -106,7 +105,7 @@ class Api {
     }
 
     checkAuthorize() {
-        this.url = this._authBaseUrl + '/users/me';
+        this.url = this._baseUrl + 'users/me';
         return fetch(this.url, {
             method: 'GET',
             credentials: 'include',

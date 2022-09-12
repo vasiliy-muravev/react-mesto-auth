@@ -6,11 +6,11 @@ function Card({card, onCardClick, onDeleteClick, onCardLike}) {
     const user = React.useContext(CurrentUserContext);
 
     /* Определяем, являемся ли мы владельцем текущей карточки */
-    const isOwn = card.owner._id === user._id;
+    const isOwn = card.owner === user._id;
     const cardDeleteButtonClassName = (`description__delete ${isOwn ? '' : 'description__delete_hidden'}`);
 
     /* Определяем, есть ли у карточки лайк, поставленный текущим пользователем */
-    const isLiked = card.likes.some(i => i._id === user._id);
+    const isLiked = card.likes.some(i => i === user._id);
     const cardLikeButtonClassName = (`description__like ${isLiked ? 'description__like_active' : ''}`);
 
     function handleClick() {
